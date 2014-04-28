@@ -51,9 +51,7 @@ Math.round = function(num, idp){
 }
 
 Math.clamp = function(num, min, max){
-	if(num < min && min < max) num = min;
-	if(num > max && max > min) num = max;
-	return num;
+	return Math.max(min, Math.min(num, max));
 }
 
 Math.cycle = function(num, min, max){
@@ -273,3 +271,52 @@ function pointerLockError(){
 document.addEventListener('pointerlockerror', pointerLockError, false);
 document.addEventListener('mozpointerlockerror', pointerLockError, false);
 document.addEventListener('webkitpointerlockerror', pointerLockError, false);
+
+/*
+	  ,ad8888ba,                88  88  88             88                            
+	 d8"'    `"8b               88  88  ""             ""                            
+	d8'                         88  88                                               
+	88              ,adPPYba,   88  88  88  ,adPPYba,  88   ,adPPYba,   8b,dPPYba,   
+	88             a8"     "8a  88  88  88  I8[    ""  88  a8"     "8a  88P'   `"8a  
+	Y8,            8b       d8  88  88  88   `"Y8ba,   88  8b       d8  88       88  
+	 Y8a.    .a8P  "8a,   ,a8"  88  88  88  aa    ]8I  88  "8a,   ,a8"  88       88  
+	  `"Y8888Y"'    `"YbbdP"'   88  88  88  `"YbbdP"'  88   `"YbbdP"'   88       88  
+*/
+
+var collision = {};
+
+collision.box = function(ax1, ay1, az1, aw, ah, ad, bx1, by1, bz1, bw, bh, bd){
+	var ax2 = ax1 + aw;
+	var ay2 = ay1 + ah;
+	var az2 = az1 + ad;
+	var bx2 = bx1 + bw;
+	var by2 = by1 + bh;
+	var bz2 = bz1 + bd;
+
+	return (ax1 < bx2 &&
+			ax2 > bx1 &&
+			ay1 < by2 &&
+			ay2 > by1 &&
+			az1 < bz2 &&
+			az2 > bz1
+	);
+}
+
+collision.boxHelper = function(aPosition, aScale, bPosition, bScale){
+	return(
+		collision.box(
+			aPosition.x - aScale.x / 2,
+			aPosition.y - aScale.y / 2,
+			aPosition.z - aScale.z / 2,
+			aScale.x,
+			aScale.y,
+			aScale.z,
+			bPosition.x - bScale.x / 2,
+			bPosition.y - bScale.y / 2,
+			bPosition.z - bScale.z / 2,
+			bScale.x,
+			bScale.y,
+			bScale.z
+		)
+	);
+}

@@ -27,18 +27,18 @@ input.mouse.moveThisFrame = false;
 input.mouse.debug = false;
 
 input.mouse.addKey = function(name, keycode){
-	if(!mouseKeyGroup[name]){
+	if(!input.mouse.keygroup[name]){
 		var mouseKey = [];
 		mouseKey.name = name;
 		mouseKey.keycode = keycode;
 		mouseKey.pressed = false;
-		mouseKeyGroup[mouseKey.name] = mouseKey;
+		input.mouse.keygroup[mouseKey.name] = mouseKey;
 	}
 }
 
 input.mouse.popKey = function(name){
-	if(mouseKeyGroup[name]){
-		mouseKeyGroup[name] = null;
+	if(input.mouse.keygroup[name]){
+		input.mouse.keygroup[name] = null;
 	}
 }
 
@@ -49,7 +49,7 @@ input.mouse.press = function(x, y, keycode){
 
 	for(var key in input.mouse.keygroup){
 		if(keycode == input.mouse.keygroup[key].keycode){
-			mouseKey.pressed = true;
+			input.mouse.keygroup[key].pressed = true;
 			return
 		}
 	}
@@ -57,12 +57,7 @@ input.mouse.press = function(x, y, keycode){
 
 input.mouse.release = function(){
 	for(var key in input.mouse.keygroup){
-		for(var code in input.mouse.keygroup[key].keycode){
-			if(input.mouse.keygroup[key].keycode[code] == keycode){
-				input.mouse.keygroup[key].pressed = false;
-				return
-			}
-		}
+		input.mouse.keygroup[key].pressed = false;
 	}
 }
 
@@ -115,7 +110,7 @@ window.onmousedown = function(e){
 		e.preventDefault();
 	}
 
-	input.mouse.press(e.button);
+	input.mouse.press(input.mouse.pressedX, input.mouse.pressedY, e.button);
 
 	if(input.mouse.debug === true){
 		console.log("button:" +e.button +"|| x:" +input.mouse.pressedX +" || y:" +input.mouse.pressedY);
@@ -123,7 +118,7 @@ window.onmousedown = function(e){
 }
 
 window.onmouseup = function(e){
-	input.mouse.release(e.button);
+	input.mouse.release();
 }
 
 window.onmousemove = function(e){
