@@ -1,7 +1,7 @@
-# Canvas Utilities #
+# LD29 In The Dark Source code #
 
-This is a simple Javascript utility library I mainly wrote to make working with canvas during game-jam events a little easier. It currently includes an extension of the default built-in Math library as well as an implementation of a simplified input system. The input system makes handling of key and mouse presses easier as well as the methods as to getting the position of the mouse cursor on the currently focused canvas element.
+This repository contains the source code for my Ludum Dare 29 entry of "In The Dark" you can try out the game [here](http://catlinman.com/games/ld29). You will also find a few helper libraries I wrote for working with three.js and input on canvas related elements.
 
 ## License ##
 
-This repository is released under the MIT license. For more information please refer to [LICENSE](https://github.com/Catlinman/canvasutilities/blob/master/LICENSE)
+This repository is released under the MIT license. For more information please refer to [LICENSE](https://github.com/Catlinman/InTheDark/blob/master/LICENSE)

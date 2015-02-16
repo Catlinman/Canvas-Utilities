@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>In The Dark</title>
+		<style>
+			body {
+				position: relative;
+				padding-top: 10px;
+				font-family: 'Arial';
+				color: #f4f4f4;
+				background: #000;
+				margin-bottom: 64px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div style="text-align:center;width:900px;margin-left:auto;margin-right:auto;">
+			<h2 class="centered">Ludum Dare 29 - Beneath the surface - In the Dark</h2>
+			<p class="centered">Notice: Google Chrome is currently the only supported 'fullscreen' browser.</p>
+			<canvas id="canvas-game" width="800" height="600" mozallowfullscreen="true" style="border: 2px solid #222">
+				<h3>Your browser does not support HTML5</h3>
+			</canvas>
+			<script type="text/javascript" src="three.min.js"></script>
+			<script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
+			<script type="text/javascript" src="canvas.utils.js"></script>
+			<script type="text/javascript" src="canvas.input.js"></script>
+			<script type="text/javascript" src="canvas.game.js"></script>
+			<h2 class="centered">- Description -</h2>
+			<p class="centered">
+				"The floor seems odd here. Is there something beneath the surface?"
+				</br>
+				The premise is simple: The ground of each level will break after a certain amount of time. Every time you descend through the ground the world you find yourself in grows bigger and more intricate. Your only help is a strange orb that follows you around
+				everywhere you go. It seems it gives off light equivalent to your lifeforce. Even though you feel the strange comfort of your new trusty follower you are still wary of what lies below. As you descend the dangers become more and
+				more visible. You have no choice but to face the <strike>slime</strike> evil that lurks in the depths.
+				</br>
+				</br>
+				Can you survive?
+				</br>
+			</p>
+			</br>
+			<h2 class="centered">- Controls -</h2>
+			<p class="centered">
+				Press 'f' to activate fullscreen mode. You will need it.
+				</br>
+				Use 'wsad' or the arrow keys to move about
+				</br>
+				Press 'space' to jump
+				</br>
+				Use the left mouse button to punch
+				</br>
+				Change the mouse look sensitivity by pressing the '+' and '-' keys
+			</p>
+		</div>
+	</body>
+</html>
