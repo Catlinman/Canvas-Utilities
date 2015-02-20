@@ -1,3 +1,5 @@
+
+// Define and load the sounds which will be used by the game.
 var CAVEAMBIENCESOUND = new Audio("res/sounds/ambience.mp3");
 var COINSOUND = new Audio("res/sounds/coin.mp3");
 var BREAKSOUND = new Audio("res/sounds/break.mp3");
@@ -14,6 +16,7 @@ var STEPSOUND2 = new Audio("res/sounds/step2.mp3");
 var STEPSOUND3 = new Audio("res/sounds/step3.mp3");
 var RUMBLESOUND = new Audio("res/sounds/rumble.mp3");
 
+// Set the volume of each sound.
 BREAKSOUND.volume = 0.75;
 COINSOUND.volume = 0.5;
 DEATHSOUND.volume = 0.75;
@@ -25,6 +28,7 @@ STEPSOUND1.volume = 0.25;
 STEPSOUND2.volume = 0.25;
 STEPSOUND3.volume = 0.25;
 
+// Create an array of 
 var HITARRAY = [HIT1SOUND, HIT2SOUND];
 var STEPARRAY = [STEPSOUND1, STEPSOUND2, STEPSOUND3];
 
@@ -32,12 +36,15 @@ var GAME = document.getElementById("canvas-game");
 var DT = 0;
 var LASTDT = Date.now();
 var TIME = 0;
+
 var WIDTH = 800,
 	HEIGHT = 600;
+
 var VIEW_ANGLE = 60,
 	ASPECT = WIDTH / HEIGHT,
 	NEAR = 0.01,
 	FAR = 75;
+
 var QUEUERENDER = false;
 
 var renderer = new THREE.WebGLRenderer({
@@ -1115,20 +1122,20 @@ function init() {
 		e.preventDefault();
 	};
 
-	input.keys.addKey("left", 37);
-	input.keys.addKey("right", 39);
-	input.keys.addKey("forward", 38);
-	input.keys.addKey("back", 40);
+	input.keys.add("left", 37);
+	input.keys.add("right", 39);
+	input.keys.add("forward", 38);
+	input.keys.add("back", 40);
 
-	input.keys.addKey("left", 65);
-	input.keys.addKey("right", 68);
-	input.keys.addKey("forward", 87);
-	input.keys.addKey("back", 83);
+	input.keys.add("left", 65);
+	input.keys.add("right", 68);
+	input.keys.add("forward", 87);
+	input.keys.add("back", 83);
 
-	input.keys.addKey("up", 32);
-	input.keys.addKey("down", 67);
+	input.keys.add("up", 32);
+	input.keys.add("down", 67);
 
-	input.keys.addKey("shoot", 69);
+	input.keys.add("shoot", 69);
 
 	input.mouse.addKey("punch", 0);
 
