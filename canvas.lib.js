@@ -20,7 +20,7 @@ Math.randomRange = function(min, max) {
 }
 
 // Randomly returns -1 or 1.
-private var numArray = [-1, 1];
+var numArray = [-1, 1];
 Math.randNonNull = function() {
 	return numArray[Math.randomRange(0, 1)];
 }
@@ -178,7 +178,7 @@ fullscreen.currentElement; // The current element requesting fullscreen to be en
 fullscreen.currentCallback; // The callback to be fired when fullscreen is activated/deactivated.
 fullscreen.pointerlock = false; // Tracks if the point is to be locked while fullscreen mode is enabled.
 
-private var fullscreenDebug = false; // Debug variable. Set to true if errors should be printed to the console.
+var fullscreenDebug = false; // Debug variable. Set to true if errors should be printed to the console.
 
 // Check if fullscreen is currently available.
 fullscreen.available = function() {
@@ -260,7 +260,7 @@ fullscreen.toggle = function(element, pointerlock, callback) {
 fullscreen.register = function(){
 
 	// Execute the fullscreen assigned callback if there is a change in state.
-	private function changeCallback() {
+	function changeCallback() {
 		if(document.webkitFullscreenElement || document.mozFullscreenElement || document.mozFullScreenElement) {
 			if(fullscreen.currentCallback) fullscreen.currentCallback(true);
 		} else {
@@ -274,7 +274,7 @@ fullscreen.register = function(){
 	document.addEventListener('webkitfullscreenchange', changeCallback, false);
 
 	// Handle pointer lock changes.
-	private function pointerLockChange() {
+	function pointerLockChange() {
 		if(fullscreenDebug === true) {
 			if(document.mozPointerLockElement || document.webkitPointerLockElement) {
 				console.log("Pointer Lock was successful.");
@@ -290,7 +290,7 @@ fullscreen.register = function(){
 	document.addEventListener('webkitpointerlockchange', pointerLockChange, false);
 
 	// Handle errors if there was an issue with activating or deactivating pointer lock mode.
-	private function pointerLockError() {
+	function pointerLockError() {
 		if(fullscreenDebug === true) {
 			console.log("Error while locking pointer.");
 		}
@@ -355,7 +355,7 @@ collision.boxHelper = function(aPosition, aScale, bPosition, bScale) {
 
 
 var input = {}; // Main object containing all input related functions and systems.
-private var focused = true; // This variable is true if the current input context is focused by the user.
+var focused = true; // This variable is true if the current input context is focused by the user.
 
 /*
 	88b           d88
@@ -375,9 +375,9 @@ input.mouse.lastX = 0, input.mouse.lastY = 0; // The last pressed mouse position
 input.mouse.movementX = 0, input.mouse.movementY = 0; // Mouse movement deltas.
 input.mouse.moveThisFrame = false; // If true the mouse was move since the last frame.
 
-private var mouseGroup = {}; // Object containing button relations defined by the user.
-private var mouseDebug = false; // If true the mouse system will print errors as they arise.
-private var mouseKeycode = -1; // The last used mouse keycode.
+var mouseGroup = {}; // Object containing button relations defined by the user.
+var mouseDebug = false; // If true the mouse system will print errors as they arise.
+var mouseKeycode = -1; // The last used mouse keycode.
 
 // Add a new mouse button assignment to the input system. Keycode stands for the button to be tracked.
 input.mouse.add = function(name, keycode) {
@@ -571,9 +571,9 @@ input.mouse.register = function(c){
 
 input.keyboard = {}; // Central object containing keyboard input related methods.
 
-private var keyGroup = {}; // Object containing all registered keys.
-private var keyboardDebug = false; // If true the system will output errors to the console.
-private var keyboardKeycode = 0; // Variable containing the last keyboard keycode supplied to the system.
+var keyGroup = {}; // Object containing all registered keys.
+var keyboardDebug = false; // If true the system will output errors to the console.
+var keyboardKeycode = 0; // Variable containing the last keyboard keycode supplied to the system.
 
 // Add a new key assignment to the input system. Keycode stands for the key to be tracked.
 input.keyboard.add = function(name, keycode) {
