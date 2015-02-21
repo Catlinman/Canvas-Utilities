@@ -15,34 +15,34 @@ Math.PI_2 = Math.PI / 2;
 Math.TAU = Math.PI * 2;
 
 // Returns a random integer in a specified range.
-Math.randomRange = function(min, max) {
+Math.randomRange = function(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Randomly returns -1 or 1.
 var numArray = [-1, 1];
-Math.randNonNull = function() {
+Math.randNonNull = function(){
 	return numArray[Math.randomRange(0, 1)];
 }
 
 // Returns a random floating point number with in a range with a specified decimal count.
-Math.randomRangeFloat = function(a, b, decimal) {
+Math.randomRangeFloat = function(a, b, decimal){
 	var value_a = 1;
 	var value_b = 1;
 
-	if(a != 0) {
+	if(a != 0){
 		value_a = a / a;
 	} else {
 		value_a = 1;
 	}
 
-	if(b != 0) {
+	if(b != 0){
 		value_b = b / b;
 	} else {
 		value_b = 1;
 	}
 
-	if(decimal) {
+	if(decimal){
 		return Math.randomRange(a * Math.pow(10, decimal) * value_a, b * (10 * decimal) * value_b) / Math.pow(10, decimal);
 	} else {
 		return Math.randomRange(a * Math.pow(10, 5) * value_a, b * Math.pow(10, 5) * value_b) / Math.pow(10, 5);
@@ -50,32 +50,32 @@ Math.randomRangeFloat = function(a, b, decimal) {
 }
 
 // Round a number to a certain decimal point.
-Math.round = function(num, idp) {
+Math.round = function(num, idp){
 	var mult = Math.pow(10, (idp || 0));
 	return Math.floor(num * mult + 0.5) / mult;
 }
 
 // Clamp a value between a minimum and maximum value.
-Math.clamp = function(num, min, max) {
+Math.clamp = function(num, min, max){
 	return Math.max(min, Math.min(num, max));
 }
 
 // Keep a value in a certain range but make it loop through the range if it passed one of the range values.
-Math.cycle = function(num, min, max) {
+Math.cycle = function(num, min, max){
 	var tick = 0;
 
-	while(num < min || num > max && tick < 10) {
+	while(num < min || num > max && tick < 10){
 		tick++;
 
-		if(num < min && min < max) {
+		if(num < min && min < max){
 			var dist = min - num;
 			num = max - dist;
-		} else if(num > max && max > min) {
+		} else if(num > max && max > min){
 			var dist = max - num;
 			num = min + dist;
 		}
 
-		if(tick == 10) {
+		if(tick == 10){
 			return Math.clamp(num, min, max);
 		}
 	}
@@ -83,13 +83,13 @@ Math.cycle = function(num, min, max) {
 }
 
 // Linear interpolation.
-Math.lerp = function(num, endNum, t) {
+Math.lerp = function(num, endNum, t){
 	return num + (endNum - num) * t;
 }
 
 // Step interpolation.
-Math.step = function(num, endNum, s) {
-	if(endNum < num) {
+Math.step = function(num, endNum, s){
+	if(endNum < num){
 		num = Math.max(num - s, endNum);
 	} else {
 		num = Math.min(num + s, endNum);
@@ -98,11 +98,11 @@ Math.step = function(num, endNum, s) {
 }
 
 // Perform linear interpolation with a degree based angle and clamp it's values.
-Math.lerpDeg = function(angle, endAngle, t) {
+Math.lerpDeg = function(angle, endAngle, t){
 	var difference = Math.abs(endAngle - angle);
 
-	if(difference > 180) {
-		if(endAngle > angle) {
+	if(difference > 180){
+		if(endAngle > angle){
 			angle += 360;
 		} else {
 			endAngle += 360;
@@ -112,7 +112,7 @@ Math.lerpDeg = function(angle, endAngle, t) {
 	var value = angle + (endAngle - angle) * t;
 	var rangeZero = 360;
 
-	if(value >= 0 && value <= 360) {
+	if(value >= 0 && value <= 360){
 		return value;
 	} else {
 		return value % rangeZero;
@@ -120,11 +120,11 @@ Math.lerpDeg = function(angle, endAngle, t) {
 }
 
 // Perform linear interpolation with a radian angle and clamp it's values.
-Math.lerpRad = function(angle, endAngle, t) {
+Math.lerpRad = function(angle, endAngle, t){
 	var difference = Math.abs(endAngle - angle)
 
-	if(difference > Math.PI) {
-		if(endAngle > angle) {
+	if(difference > Math.PI){
+		if(endAngle > angle){
 			angle = angle + (Math.PI * 2);
 		} else {
 			endAngle = endAngle + (Math.PI * 2);
@@ -134,7 +134,7 @@ Math.lerpRad = function(angle, endAngle, t) {
 	var value = angle + (endAngle - angle) * t;
 	var rangeZero = (Math.PI * 2);
 
-	if(value >= 0 && value <= (Math.PI * 2)) {
+	if(value >= 0 && value <= (Math.PI * 2)){
 		return value;
 	} else {
 		return value % rangeZero;
@@ -142,18 +142,18 @@ Math.lerpRad = function(angle, endAngle, t) {
 }
 
 // Convert radians to degrees.
-Math.deg = function(rad) {
+Math.deg = function(rad){
 	return rad * (180 / Math.PI);
 }
 
 // Convert degrees to radians.
-Math.rad = function(deg) {
+Math.rad = function(deg){
 	return deg * (Math.PI / 180);
 }
 
 // Return a percentage based value of two numbers.
-Math.percent = function(startNum, endNum, percent) {
-	if(percent > 100 || percent < 0) {
+Math.percent = function(startNum, endNum, percent){
+	if(percent > 100 || percent < 0){
 		percent = Math.clamp(percent, 0, 100);
 	}
 
@@ -181,8 +181,8 @@ fullscreen.pointerlock = false; // Tracks if the point is to be locked while ful
 var fullscreenDebug = false; // Debug variable. Set to true if errors should be printed to the console.
 
 // Check if fullscreen is currently available.
-fullscreen.available = function() {
-	if(document.documentElement.requestFullscreen || document.documentElement.mozCancelFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen) {
+fullscreen.available = function(){
+	if(document.documentElement.requestFullscreen || document.documentElement.mozCancelFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen){
 		return true;
 	} else {
 		return false;
@@ -190,8 +190,8 @@ fullscreen.available = function() {
 }
 
 // Check if fullscreen mode is currently active.
-fullscreen.activated = function() {
-	if(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+fullscreen.activated = function(){
+	if(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement){
 		return true;
 	} else {
 		return false;
@@ -199,57 +199,60 @@ fullscreen.activated = function() {
 }
 
 // Request to enter fullscreen mode from a certain context element.
-fullscreen.request = function(element) {
+fullscreen.request = function(element){
 	element = element || document.documentElement;
-	if(element.requestFullscreen) {
+	if(element.requestFullscreen){
 		element.requestFullscreen();
-	} else if(element.mozRequestFullScreen) {
+	} else if(element.mozRequestFullScreen){
 		element.mozRequestFullScreen();
-	} else if(element.webkitRequestFullscreen) {
+	} else if(element.webkitRequestFullscreen){
 		element.webkitRequestFullscreen();
-	} else if(element.msRequestFullscreen) {
+	} else if(element.msRequestFullscreen){
 		element.msRequestFullscreen();
 	}
 
 	currentElement = element;
+
+	if(fullscreen.currentCallback) fullscreen.currentCallback(true);
 }
 
 // Force exit fullscreen mode.
-fullscreen.cancel = function() {
-	if(document.exitFullscreen) {
+fullscreen.cancel = function(){
+	if(document.exitFullscreen){
 		document.exitFullscreen();
-	} else if(document.mozCancelFullScreen) {
+	} else if(document.mozCancelFullScreen){
 		document.mozCancelFullScreen();
-	} else if(document.webkitExitFullscreen) {
+	} else if(document.webkitExitFullscreen){
 		document.webkitExitFullscreen();
 	}
 
 	currentElement = null;
+
 	if(fullscreen.currentCallback) fullscreen.currentCallback(false);
 }
 
 // Toggle fullscreen mode and assign a fullscreen callback. Also inform the system if it is to pointerlock. 
-fullscreen.toggle = function(element, pointerlock, callback) {
-	if(fullscreen.available() == true) {
-		if(fullscreen.activated() == false) {
+fullscreen.toggle = function(element, pointerlock, callback){
+	if(fullscreen.available() == true){
+		if(fullscreen.activated() == false){
+			if(callback){
+				fullscreen.currentCallback = callback;
+			}
+
 			fullscreen.request(element);
 
 			pointerlock = pointerlock || false;
 
-			if(pointerlock === true) {
-				if(document.webkitFullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element) {
+			if(pointerlock === true){
+				if(document.webkitFullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element){
 					element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 					element.requestPointerLock();
 				}
 			}
-
-			if(callback) {
-				fullscreen.currentCallback = callback;
-			}
 		} else {
 			fullscreen.cancel();
 
-			if(callback) {
+			if(callback){
 				fullscreen.currentCallback = null;
 			}
 		}
@@ -260,8 +263,8 @@ fullscreen.toggle = function(element, pointerlock, callback) {
 fullscreen.register = function(){
 
 	// Execute the fullscreen assigned callback if there is a change in state.
-	function changeCallback() {
-		if(document.webkitFullscreenElement || document.mozFullscreenElement || document.mozFullScreenElement) {
+	function changeCallback(){
+		if(document.webkitFullscreenElement || document.mozFullscreenElement || document.mozFullScreenElement){
 			if(fullscreen.currentCallback) fullscreen.currentCallback(true);
 		} else {
 			if(fullscreen.currentCallback) fullscreen.currentCallback(false);
@@ -274,9 +277,9 @@ fullscreen.register = function(){
 	document.addEventListener('webkitfullscreenchange', changeCallback, false);
 
 	// Handle pointer lock changes.
-	function pointerLockChange() {
-		if(fullscreenDebug === true) {
-			if(document.mozPointerLockElement || document.webkitPointerLockElement) {
+	function pointerLockChange(){
+		if(fullscreenDebug === true){
+			if(document.mozPointerLockElement || document.webkitPointerLockElement){
 				console.log("Pointer Lock was successful.");
 			} else {
 				console.log("Pointer Lock was lost.");
@@ -290,8 +293,8 @@ fullscreen.register = function(){
 	document.addEventListener('webkitpointerlockchange', pointerLockChange, false);
 
 	// Handle errors if there was an issue with activating or deactivating pointer lock mode.
-	function pointerLockError() {
-		if(fullscreenDebug === true) {
+	function pointerLockError(){
+		if(fullscreenDebug === true){
 			console.log("Error while locking pointer.");
 		}
 	}
@@ -316,7 +319,7 @@ fullscreen.register = function(){
 var collision = {}; // Main object containing the collision methods.
 
 // Perform basic collision between two three dimensional boxes (a, b).
-collision.box = function(ax1, ay1, az1, aw, ah, ad, bx1, by1, bz1, bw, bh, bd) {
+collision.box = function(ax1, ay1, az1, aw, ah, ad, bx1, by1, bz1, bw, bh, bd){
 	var ax2 = ax1 + aw;
 	var ay2 = ay1 + ah;
 	var az2 = az1 + ad;
@@ -334,7 +337,7 @@ collision.box = function(ax1, ay1, az1, aw, ah, ad, bx1, by1, bz1, bw, bh, bd) {
 }
 
 // Same as collision.box but takes in formatted vector objects instead of a huge list of arguments.
-collision.boxHelper = function(aPosition, aScale, bPosition, bScale) {
+collision.boxHelper = function(aPosition, aScale, bPosition, bScale){
 	return(
 		collision.box(
 			aPosition.x - aScale.x / 2,
@@ -377,14 +380,14 @@ input.mouse.moveThisFrame = false; // If true the mouse was move since the last 
 
 var mouseGroup = {}; // Object containing button relations defined by the user.
 var mouseDebug = false; // If true the mouse system will print errors as they arise.
-var mouseKeycode = -1; // The last used mouse keycode.
+var mouseButton = -1; // The last used mouse button.
 
 // Add a new mouse button assignment to the input system. Keycode stands for the button to be tracked.
-input.mouse.add = function(name, keycode) {
-	if(!mouseGroup[name]) {
+input.mouse.add = function(name, button){
+	if(!mouseGroup[name]){
 		var mouseKey = [];
 		mouseKey.name = name;
-		mouseKey.keycode = keycode;
+		mouseKey.button = button;
 		mouseKey.pressed = false;
 		mouseKey.callbacks = [];
 		mouseGroup[mouseKey.name] = mouseKey;
@@ -392,59 +395,59 @@ input.mouse.add = function(name, keycode) {
 }
 
 // Remove a mouse button from the input system by it's name.
-input.mouse.pop = function(name) {
-	if(mouseGroup[name]) {
+input.mouse.pop = function(name){
+	if(mouseGroup[name]){
 		mouseGroup[name] = null;
 	}
 }
 
 // Register a mouse button press to the system and pass the required arguments.
-input.mouse.press = function(x, y, keycode) {
-	// Update the positions and set the latest keycode.
+input.mouse.press = function(x, y, button){
+	// Update the positions and set the latest button.
 	input.mouse.x = x;
 	input.mouse.y = y;
-	mouseKeycode = keycode;
+	mouseButton = button;
 
 	// Go through the list of keys and check if any of them need to be flagged as pressed.
-	for(var button in mouseGroup) {
-		if(keycode == mouseGroup[button].keycode) {
-			mouseGroup[button].pressed = true;
+	for(var name in mouseGroup){
+		if(button == mouseGroup[name].button){
+			mouseGroup[name].pressed = true;
 
 			// If the button is pressed we should execute all registered callbacks.
-			for(var callback in mouseGroup[button].callbacks){
+			for(var callback in mouseGroup[name].callbacks){
 				callback(x, y); // Pass the pressed position to the callback.
 			}
-
-			return
 		}
 	}
 }
 
 // Notify a mouse button that it is to be released.
-input.mouse.release = function(name) {
-	if(mouseGroup[name]){
-		mouseGroup[name].pressed = false;
+input.mouse.release = function(button){
+	for(var name in mouseGroup){
+		if(button == mouseGroup[name].button){
+			mouseGroup[name].pressed = false;
+		}
 	}
 }
 
 // Release all mouse keys at the same time.
-input.mouse.releaseAll = function() {
-	for(var button in mouseGroup) {
+input.mouse.releaseAll = function(){
+	for(var button in mouseGroup){
 		mouseGroup[button].pressed = false;
 	}
 }
 
 // Return a specified button's pressed state.
-input.mouse.check = function(name) {
-	if(mouseGroup[name]) {
+input.mouse.check = function(name){
+	if(mouseGroup[name]){
 		return mouseGroup[name].pressed;
 	}
 }
 
 // Return a keycode for the first button to be pressed in the mouse keygroup.
-input.mouse.checkAny = function() {
-	for(var button in mouseGroup) {
-		if(mouseGroup[button].pressed) {
+input.mouse.checkAny = function(){
+	for(var button in mouseGroup){
+		if(mouseGroup[button].pressed){
 			return mouseKey.keycode;
 		}
 	}
@@ -453,21 +456,21 @@ input.mouse.checkAny = function() {
 }
 
 // Return the last keycode passed to the system.
-input.mouse.checkKeycode = function() {
+input.mouse.checkKeycode = function(){
 	return mouseKeycode
 }
 
 // Get the number of mouse buttons currently pressed.
-input.mouse.getPressedNum = function() {
+input.mouse.getPressedNum = function(){
 	count = 0;
-	for(var button in mouseGroup) {
+	for(var button in mouseGroup){
 		if(mouseGroup[button].pressed == true) count += 1;
 	}
 	return count
 }
 
 // Return the current mouse position as formatted object.
-input.mouse.getPosition = function() {
+input.mouse.getPosition = function(){
 	return {
 		x: input.mouse.x,
 		y: input.mouse.y
@@ -475,7 +478,7 @@ input.mouse.getPosition = function() {
 }
 
 // Returns the last clicked position as a formatted object containing the x and y values.
-input.mouse.getClickedPosition = function() {
+input.mouse.getClickedPosition = function(){
 	return {
 		x: input.mouse.pressedX,
 		y: input.mouse.pressedY
@@ -486,30 +489,34 @@ input.mouse.getClickedPosition = function() {
 // This needs to be called to actually activate the mouse input system.
 input.mouse.register = function(c){
 
+	var context = document.getElementById(c);
+
 	// Handle mouse presses within the browser.
-	window.onmousedown = function(e) {
+	onMouseDown = function(e){
 		var surface = document.getElementById(c) || document.documentElement;;
 		var rect = surface.getBoundingClientRect();
 
 		input.mouse.pressedX = e.clientX - rect.left;
 		input.mouse.pressedY = e.clientY - rect.top;
 
-		if(input.mouse.x < surface.width && input.mouse.x > 0 && input.mouse.y < surface.height && input.mouse.y > 0) {
+		if(input.mouse.x < surface.width && input.mouse.x > 0 && input.mouse.y < surface.height && input.mouse.y > 0){
 			e.preventDefault();
 		}
 
 		input.mouse.press(input.mouse.pressedX, input.mouse.pressedY, e.button);
 
-		if(input.mouse.debug === true) {
+		if(input.mouse.debug === true){
 			console.log("button:" + e.button + "|| x:" + input.mouse.pressedX + " || y:" + input.mouse.pressedY);
 		}
+
+		console.log(e.button)
 	}
 
-	window.onmouseup = function(e) {
-		input.mouse.release();
+	onMouseUp = function(e){
+		input.mouse.release(e.button);
 	}
 
-	window.onmousemove = function(e) {
+	onMouseMove = function(e){
 		var surface = document.getElementById(c) || document.documentElement;
 		var rect = surface.getBoundingClientRect();
 		input.mouse.movedThisFrame = true;
@@ -518,42 +525,37 @@ input.mouse.register = function(c){
 		input.mouse.x = e.clientX - rect.left;
 		input.mouse.y = e.clientY - rect.top;
 
-		if(document.pointerLockElement) {
-			// Calculate mouse movement deltas if the mouse cursor has been locked.
-			input.mouse.movementX = input.mouse.x - input.mouse.lastX;
-			input.mouse.movementY = input.mouse.y - input.mouse.lastY;
-			input.mouse.lastX = input.mouse.x;
-			input.mouse.lastY = input.mouse.y;
-
-		} else {
-			// Fetch the mouse movement from the current event if available.
-			input.mouse.movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-			input.mouse.movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-		}
+		// Fetch the mouse movement from the current event if available.
+		input.mouse.movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+		input.mouse.movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
 		// Check if any keys are currently pressed.
 		var pressed = false;
-		for(var button in mouseGroup) {
-			if(mouseGroup[button].pressed === true) {
+		for(var button in mouseGroup){
+			if(mouseGroup[button].pressed === true){
 				pressed = true;
 				break
 			}
 		}
 
 		// Update the pressed position if there still is a pressed button.
-		if(pressed === true) {
+		if(pressed === true){
 			input.mouse.pressedX = input.mouse.x;
 			input.mouse.pressedY = input.mouse.y;
 		}
 
 		// Reset the movement deltas to avoid additional mouse movement.
 		requestAnimationFrame(
-			function() {
+			function(){
 				input.mouse.movementX = 0;
 				input.mouse.movementY = 0;
 			}
 		);
 	}
+
+	document.addEventListener('mousedown', onMouseDown, false);
+	document.addEventListener('mouseup', onMouseUp, false);
+	document.addEventListener('mousemove', onMouseMove, false);
 }
 
 /*
@@ -576,8 +578,8 @@ var keyboardDebug = false; // If true the system will output errors to the conso
 var keyboardKeycode = 0; // Variable containing the last keyboard keycode supplied to the system.
 
 // Add a new key assignment to the input system. Keycode stands for the key to be tracked.
-input.keyboard.add = function(name, keycode) {
-	if(!keyGroup[name]) {
+input.keyboard.add = function(name, keycode){
+	if(!keyGroup[name]){
 		key = [];
 		key.name = name;
 		key.keycode = [];
@@ -588,7 +590,7 @@ input.keyboard.add = function(name, keycode) {
 		keyGroup[key.name] = key;
 
 	} else {
-		for(var code in keyGroup[name].keycode) {
+		for(var code in keyGroup[name].keycode){
 			if(keyGroup[name].keycode[code] == keycode) return;
 		}
 
@@ -597,79 +599,75 @@ input.keyboard.add = function(name, keycode) {
 }
 
 // Remove a registered key by it's name.
-input.keyboard.pop = function(name) {
-	if(keyGroup[name]) {
+input.keyboard.pop = function(name){
+	if(keyGroup[name]){
 		keyGroup[name] = null;
 	}
 }
 
 // Add a callback to a specified key which will be fired when it is pressed.
 input.keyboard.addCallback = function(name, callbackname, callback){
-	if(keyGroup[name]) {
-		if(!keyGroup[name].callbacks[callbackname]) {
+	if(keyGroup[name]){
+		if(!keyGroup[name].callbacks[callbackname]){
 			keyGroup[name].callbacks[callbackname] = callback;
 		}
 	}
 }
 
 // Pop a callback from a given key.
-input.keyboard.popCallback = function(name, callbackname)
-	if(keyGroup[name]) {
-		if(keyGroup[name].callbacks[callbackname]) {
+input.keyboard.popCallback = function(name, callbackname){
+	if(keyGroup[name]){
+		if(keyGroup[name].callbacks[callbackname]){
 			keyGroup[name].callbacks[callbackname] = null;
 		}
 	}
 }
 
 // Notify all keys with a certain keycode that they are pressed.
-input.keyboard.press = function(keycode) {
+input.keyboard.press = function(keycode){
 	keyboardKeycode = keycode;
-	for(var key in keyGroup) {
-		for(var code in keyGroup[key].keycode) {
-
-			if(keyGroup[key].keycode[code] == keycode) {
+	for(var key in keyGroup){
+		for(var code in keyGroup[key].keycode){
+			if(keyGroup[key].keycode[code] == keycode){
 				keyGroup[key].pressed = true;
 
 				for(var callback in keyGroup[key].callbacks){
-					callback();
+					keyGroup[key].callbacks[callback]();
 				}
-
-				return
 			}
 		}
 	}
 }
 
 // Release a certain key.
-input.keyboard.release = function(keycode) {
-	for(var key in keyGroup) {
-		for(var code in keyGroup[key].keycode) {
-			if(keyGroup[key].keycode[code] == keycode) {
+input.keyboard.release = function(keycode){
+	for(var key in keyGroup){
+		for(var code in keyGroup[key].keycode){
+			if(keyGroup[key].keycode[code] == keycode){
 				keyGroup[key].pressed = false;
-				return
 			}
 		}
 	}
 }
 
 // Release all registered keys.
-input.keyboard.releaseAll = function() {
-	for(var key in keyGroup) {
+input.keyboard.releaseAll = function(){
+	for(var key in keyGroup){
 		keyGroup[key].pressed = false;
 	}
 }
 
 // Check if a given key is pressed.
-input.keyboard.check = function(name) {
-	if(keyGroup[name]) {
+input.keyboard.check = function(name){
+	if(keyGroup[name]){
 		return keyGroup[name].pressed;
 	}
 }
 
 // Check if any of the registered keys is pressed.
-input.keyboard.checkAny = function() {
-	for(var key in keyGroup) {
-		if(keyGroup[key].pressed) {
+input.keyboard.checkAny = function(){
+	for(var key in keyGroup){
+		if(keyGroup[key].pressed){
 			return true
 		}
 	}
@@ -677,22 +675,22 @@ input.keyboard.checkAny = function() {
 }
 
 // Return the last pressed keycode.
-input.keyboard.checkKeycode = function() {
+input.keyboard.checkKeycode = function(){
 	return keyboardKeycode;
 }
 
 // Retrieve the amount of keys currently pressed.
-input.keyboard.getPressedNum = function() {
+input.keyboard.getPressedNum = function(){
 	count = 0;
-	for(var key in keyGroup) {
+	for(var key in keyGroup){
 		if(keyGroup[key].pressed == true) count += 1;
 	}
 	return count
 }
 
 // Returns true if a key with the specified name is registered.
-input.keyboard.scope = function(name) {
-	if(keyGroup[name]) {
+input.keyboard.scope = function(name){
+	if(keyGroup[name]){
 		return true
 	} else {
 		return false
@@ -709,27 +707,27 @@ input.isFocused = function(){
 input.keyboard.register = function(){
 
 	// Register listeners for keyboard events.
-	document.addEventListener("keydown", function(e) {
+	document.addEventListener("keydown", function(e){
 		input.keyboard.press(e.keyCode);
 		if(keyboardDebug) console.log(e.keyCode);
 	});
 
-	document.addEventListener("keyup", function(e) {
+	document.addEventListener("keyup", function(e){
 		input.keyboard.release(e.keyCode)
 	});
 
-	window.addEventListener("keydown", function(e) {
-		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+	window.addEventListener("keydown", function(e){
+		if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1){
 			e.preventDefault();
 		}
 	}, false);
 
 	// Set the focus methods.
-	window.onfocus = function(e) {
+	window.onfocus = function(e){
 		focused = true;
 	}
 
-	window.onblur = function(e) {
+	window.onblur = function(e){
 		focused = false;
 	}
 }
