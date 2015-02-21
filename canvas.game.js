@@ -1286,7 +1286,6 @@ renderer.context.canvas.addEventListener("webglcontextlost", function(event){
 
 // This function is called when the fullscreen library changes it's mode. State is true if fullscreen is active.
 function onFullscreenChange(state){
-	console.log(state);
 	if(state === true){
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		camera.aspect = window.innerWidth / window.innerHeight;

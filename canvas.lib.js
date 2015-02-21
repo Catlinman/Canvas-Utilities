@@ -508,8 +508,6 @@ input.mouse.register = function(c){
 		if(input.mouse.debug === true){
 			console.log("button:" + e.button + "|| x:" + input.mouse.pressedX + " || y:" + input.mouse.pressedY);
 		}
-
-		console.log(e.button)
 	}
 
 	onMouseUp = function(e){
