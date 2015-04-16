@@ -42,9 +42,7 @@ var GAME = document.getElementById("canvas-game"); // Select the main element th
 var DT = 0; // Variable storing the current frame's deltatime.
 var LASTDT = Date.now(); // The previous frame's deltatime.
 var TIME = 0; // The current time elapsed since the game started.
-
 var WIDTH = 800, HEIGHT = 600; // Width and height of the main canvas.
-
 var VIEW_ANGLE = 60, ASPECT = WIDTH / HEIGHT, NEAR = 0.01, FAR = 75; // Camera render settings.
 
 var QUEUERENDER = false;
@@ -60,8 +58,7 @@ var renderer = new THREE.WebGLRenderer({
 var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 var scene = new THREE.Scene();
 
-// Mouse sensitivity.
-var sensitivity = 0.025;
+var sensitivity = 0.025; // Mouse sensitivity.
 
 // Set renderer flags.
 renderer.shadowMapEnabled = true;
@@ -98,20 +95,20 @@ var totalEnemies = 0;
 var timeleft = 15;
 
 // Color helper functions
-function createRGB(r, g, b){
+function createRGB(r, g, b) {
 	return new THREE.Color("rgb(" + r + "," + g + "," + b + ")");
 }
 
-function createRGBNoise(r, g, b, noise){
+function createRGBNoise(r, g, b, noise) {
 	return new THREE.Color("rgb(" + (r + Math.randomRange(-noise, noise)) + "," + (g + Math.randomRange(-noise, noise)) + "," + (b + Math.randomRange(-noise, noise)) + ")");
 }
 
-function colorLerp(from, to, t){
+function colorLerp(from, to, t) {
 	return new THREE.Color((Math.lerp(from.r, to.r, t)), (Math.lerp(from.g, to.g, t)), (Math.lerp(from.b, to.b, t)));
 }
 
 // Function to be called when the game has come to an end.
-function notifyGameOver(){
+function notifyGameOver() {
 	ambiance.requestColor = createRGB(0, 0, 0);
 	ambiance.worldlightIntensity = 0;
 	ambiance.ambientlightColor = createRGB(0, 0, 0);
@@ -132,6 +129,7 @@ function notifyGameOver(){
 		bevelThickness: 0.1,
 		weight: 'normal'
 	});
+
 	var text = new THREE.Mesh(geometry, material);
 	text.position = new THREE.Vector3(-8.5, 14, -15);
 	scene.add(text);
@@ -144,6 +142,7 @@ function notifyGameOver(){
 		bevelThickness: 0.1,
 		weight: 'normal'
 	});
+
 	var text = new THREE.Mesh(geometry, material);
 	text.position = new THREE.Vector3(-7.5, 11.5, -15);
 	scene.add(text);
@@ -156,6 +155,7 @@ function notifyGameOver(){
 		bevelThickness: 0.1,
 		weight: 'normal'
 	});
+
 	var text = new THREE.Mesh(geometry, material);
 	text.position = new THREE.Vector3(-5.0, 8.5, -15);
 	text.rotation.x = -0.1;
@@ -169,6 +169,7 @@ function notifyGameOver(){
 		bevelThickness: 0.1,
 		weight: 'normal'
 	});
+
 	var text = new THREE.Mesh(geometry, material);
 	text.position = new THREE.Vector3(-5.25, 5.5, -15);
 	text.rotation.x = -0.2;
@@ -176,7 +177,7 @@ function notifyGameOver(){
 }
 
 // Generates a new floor based on the input arguments.
-function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detailColor, skyColor, skyIntensity, ambientlightColor){
+function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detailColor, skyColor, skyIntensity, ambientlightColor) {
 	var size = Math.clamp(depth, 1, 6) * 16;
 	var o = obstacles || Math.clamp(currentFloor * 16, 0, 142);
 	var f = foliageNum || 200;
@@ -187,22 +188,29 @@ function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detai
 	player.safeHeight = -Math.pow(2, depth) * 2;
 
 	var fColor = floorColor || null;
-	for(var i = 0; i < size / 4; i++){
-		for(var j = 0; j < size / 4; j++){
+
+	for(var i = 0; i < size / 4; i++) {
+		for(var j = 0; j < size / 4; j++) {
+
 			var chance = 3;
+
 			if(depth > 1) chance = Math.randomRange(1, Math.max(255 - depth * 50, 100));
-			if(chance > 2){
+
+			if(chance > 2) {
 				new Entities.Tile(new THREE.Vector3(i * 4 - size / 2, -Math.pow(2, depth) * 2 - 1, j * 4 - size / 2), null, new THREE.Vector3(4, 1, 4), fColor);
-			} else if(chance == 2){
+
+			} else if(chance == 2) {
 				new Entities.Spike(new THREE.Vector3(i * 4 - size / 2, -Math.pow(2, depth) * 2 - 1, j * 4 - size / 2), null, new THREE.Vector3(4, 1, 4), fColor);
-			} else{
+
+			} else {
 				new Entities.JumpPad(new THREE.Vector3(i * 4 - size / 2, -Math.pow(2, depth) * 2 - 1, j * 4 - size / 2), null, new THREE.Vector3(4, 1, 4), fColor);
 			}
 		}
 	}
 
 	var wColor = wallColor || null;
-	for(var i = 0; i < o; i++){
+
+	for(var i = 0; i < o; i++) {
 		new Entities.FallingBox(
 			new THREE.Vector3(Math.randomRangeFloat(-size / 2, size / 2), -Math.pow(2, depth) * 2 - 1, Math.randomRangeFloat(-size / 2, size / 2)),
 			null,
@@ -217,7 +225,8 @@ function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detai
 	new Entities.Box(new THREE.Vector3(1, -Math.pow(2, depth) - 1, -size / 2), null, new THREE.Vector3(size, Math.pow(2, depth) * 3, 4), wColor);
 
 	var dColor = detailColor || null;
-	for(var i = 0; i < f; i++){
+
+	for(var i = 0; i < f; i++) {
 		new Entities.Foliage(
 			new THREE.Vector3(Math.randomRangeFloat(-size / 2, size / 2), floorHeight - 1, Math.randomRangeFloat(-size / 2, size / 2)),
 			dColor
@@ -229,12 +238,12 @@ function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detai
 	ambiance.requestColor = sColor;
 	ambiance.worldlightIntensity = skyIntensity || 0;
 
-	if(depth > 1){
-		for(var i = 0; i < (Math.min(depth * 4, 25)); i++){
+	if(depth > 1) {
+		for(var i = 0; i < (Math.min(depth * 4, 25)); i++) {
 			new Entities.Coin(new THREE.Vector3(Math.randomRangeFloat(-size / 2, size / 2), -Math.pow(2, depth), Math.randomRangeFloat(-size / 2, size / 2)));
 		}
 
-		for(var i = 0; i < (Math.min(Math.randomRange(depth, depth * 3), 48)); i++){
+		for(var i = 0; i < (Math.min(Math.randomRange(depth, depth * 3), 48)); i++) {
 			new Entities.Enemy(new THREE.Vector3(Math.randomRangeFloat(-size / 2, size / 2), -Math.pow(2, depth), Math.randomRangeFloat(-size / 2, size / 2)));
 		}
 
@@ -244,7 +253,7 @@ function generateRoom(depth, obstacles, foliageNum, floorColor, wallColor, detai
 }
 
 // The ambiance controller gradually changes the world colors to the new requested color each floor change.
-Entities.AmbianceController = function(){
+Entities.AmbianceController = function() {
 	this.position = new THREE.Vector3(9000, 9000, 9000);
 	this.rotation = new THREE.Euler();
 	this.scale = new THREE.Vector3(0, 0, 0);
@@ -262,22 +271,24 @@ Entities.AmbianceController = function(){
 	Entities.Objects.push(this);
 }
 
-Entities.AmbianceController.prototype.update = function(dt){
-	if(gameover == false){
+Entities.AmbianceController.prototype.update = function(dt) {
+	if(gameover == false) {
 		timeleft = timeleft - dt;
 
-		if(timeleft < 0){
+		if(timeleft < 0) {
 			player.yawObject.position.y += 0.1;
 			player.velocity.y = 0.3;
 			currentFloor++;
 			generateRoom(currentFloor, null, null, null, null, null);
 
 			timeleft = 10 + Math.min(10 * currentFloor, 45);
-		} else if(timeleft < 5){
+
+		} else if(timeleft < 5) {
 			if(Math.ceil(timeleft) == 5) RUMBLESOUND.play();
-			for(var i = 0; i < Entities.Objects.length; i++){
-				if(Entities.Objects[i] != this && Entities.Objects[i] != player && Entities.Objects[i] != fancylight){
-					if(Entities.Objects[i].mesh){
+
+			for(var i = 0; i < Entities.Objects.length; i++) {
+				if(Entities.Objects[i] != this && Entities.Objects[i] != player && Entities.Objects[i] != fancylight) {
+					if(Entities.Objects[i].mesh) {
 						Entities.Objects[i].mesh.rotation.x += Math.randomRangeFloat(-0.0025, 0.0025);
 						Entities.Objects[i].mesh.rotation.y += Math.randomRangeFloat(-0.0025, 0.0025);
 						Entities.Objects[i].mesh.rotation.z += Math.randomRangeFloat(-0.0025, 0.0025);
@@ -295,12 +306,12 @@ Entities.AmbianceController.prototype.update = function(dt){
 	renderer.setClearColor(this.color);
 }
 
-Entities.AmbianceController.prototype.destroy = function(){
+Entities.AmbianceController.prototype.destroy = function() {
 	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Block entity. It's a box. It doesn't do much.
-Entities.Box = function(position, rotation, scale, color){
+Entities.Box = function(position, rotation, scale, color) {
 	this.collider = true;
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler();
@@ -323,27 +334,27 @@ Entities.Box = function(position, rotation, scale, color){
 	this.level = currentFloor;
 
 	scene.add(this.mesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.Box.prototype.update = function(dt){
-	if(this.level != currentFloor){
-		if(this.mesh.position.y > 100){
+Entities.Box.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
+		if(this.mesh.position.y > 100) {
 			this.destroy();
-		} else{
+
+		} else {
 			this.mesh.position.y += dt * 16;
 		}
 	}
 }
 
-Entities.Box.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Box.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Falling box. Does what it says. Very amaze.
-Entities.FallingBox = function(position, rotation, scale, color){
+Entities.FallingBox = function(position, rotation, scale, color) {
 	this.collider = true;
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler();
@@ -373,15 +384,15 @@ Entities.FallingBox = function(position, rotation, scale, color){
 	this.level = currentFloor;
 
 	scene.add(this.mesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.FallingBox.prototype.update = function(dt){
-	if(this.level != currentFloor){
-		if(this.mesh.position.y < floorHeight - this.mesh.scale.y){
+Entities.FallingBox.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
+		if(this.mesh.position.y < floorHeight - this.mesh.scale.y) {
 			this.destroy();
-		} else{
+
+		} else {
 			this.scale = new THREE.Vector3(0, 0, 0);
 			this.vy = Math.lerp(this.vy, -9.81, dt / 24);
 			this.mesh.position.y += this.vy;
@@ -392,13 +403,13 @@ Entities.FallingBox.prototype.update = function(dt){
 	}
 }
 
-Entities.FallingBox.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.FallingBox.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Item coins that can be picked up by the player for points and health.
-Entities.Coin = function(position, rotation, scale, color){
+Entities.Coin = function(position, rotation, scale, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler();
 	this.scale = scale || new THREE.Vector3(1, 1, 1);
@@ -419,12 +430,11 @@ Entities.Coin = function(position, rotation, scale, color){
 	scene.add(this.mesh);
 
 	this.level = currentFloor;
-
 	Entities.Objects.push(this);
 }
 
-Entities.Coin.prototype.update = function(dt){
-	if(this.mesh.position.distanceToSquared(player.position) < 1.5){
+Entities.Coin.prototype.update = function(dt) {
+	if(this.mesh.position.distanceToSquared(player.position) < 1.5) {
 		fancylight.spotlight.intensity = 25;
 		COINSOUND.play();
 		totalCoins++;
@@ -436,7 +446,7 @@ Entities.Coin.prototype.update = function(dt){
 	this.vy = Math.lerp(this.vy, -9.81, dt / 24);
 	this.mesh.position.y += this.vy;
 
-	if(this.mesh.position.y < floorHeight){
+	if(this.mesh.position.y < floorHeight) {
 		this.mesh.position.y = floorHeight - 0.5;
 		this.vy = -this.vy / 8;
 	}
@@ -444,13 +454,13 @@ Entities.Coin.prototype.update = function(dt){
 	if(this.level < currentFloor - 1) this.destroy();
 }
 
-Entities.Coin.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Coin.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Foliage entity in form of a billboard auto aligned towards the player.
-Entities.Foliage = function(position, color){
+Entities.Foliage = function(position, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = new THREE.Euler(0, Math.random() * 2, 0);
 	this.scale = new THREE.Vector3();
@@ -468,25 +478,24 @@ Entities.Foliage = function(position, color){
 	this.mesh.rotation = this.rotation;
 	this.mesh.castShadow = true;
 
-	scene.add(this.mesh);
-
 	this.level = currentFloor;
 
+	scene.add(this.mesh);
 	Entities.Objects.push(this);
 }
 
-Entities.Foliage.prototype.update = function(dt){
+Entities.Foliage.prototype.update = function(dt) {
 	this.mesh.lookAt(player.yawObject.position);
 	if(this.level != currentFloor) this.destroy();
 }
 
-Entities.Foliage.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Foliage.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // The floor uses these to put itself together.
-Entities.Tile = function(position, rotation, scale, color){
+Entities.Tile = function(position, rotation, scale, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler(Math.rad(270), 0, Math.rad(90));
 	this.scale = scale || new THREE.Vector3(1, 1, 1);
@@ -514,15 +523,15 @@ Entities.Tile = function(position, rotation, scale, color){
 	this.level = currentFloor;
 
 	scene.add(this.mesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.Tile.prototype.update = function(dt){
-	if(this.level != currentFloor){
-		if(this.mesh.position.y < floorHeight){
+Entities.Tile.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
+		if(this.mesh.position.y < floorHeight) {
 			this.destroy();
-		} else{
+
+		} else {
 			this.scale = new THREE.Vector3(0, 0, 0);
 			this.vy = Math.lerp(this.vy, -9.81, dt / 16);
 			this.mesh.position.y += this.vy;
@@ -533,13 +542,13 @@ Entities.Tile.prototype.update = function(dt){
 	}
 }
 
-Entities.Tile.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Tile.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Special floor beneath the actual surface.
-Entities.Floor = function(position, rotation, scale, color){
+Entities.Floor = function(position, rotation, scale, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler(Math.rad(270), 0, Math.rad(90));
 	this.scale = scale || new THREE.Vector3(1, 1, 1);
@@ -563,19 +572,19 @@ Entities.Floor = function(position, rotation, scale, color){
 	Entities.Objects.push(this);
 }
 
-Entities.Floor.prototype.update = function(dt){
-	if(this.level != currentFloor){
+Entities.Floor.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
 		this.destroy();
 	}
 }
 
-Entities.Floor.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Floor.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Light entity following the player after the first floor.
-Entities.FancyLight = function(position, rotation, scale, color, strength){
+Entities.FancyLight = function(position, rotation, scale, color, strength) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler();
 	this.scale = scale || new THREE.Vector3(1, 1, 0.5);
@@ -589,6 +598,7 @@ Entities.FancyLight = function(position, rotation, scale, color, strength){
 		color: this.color,
 		wireframe: false
 	});
+
 	this.mesh = new THREE.Mesh(geometry, material);
 	this.mesh.position = this.position;
 
@@ -610,12 +620,11 @@ Entities.FancyLight = function(position, rotation, scale, color, strength){
 	scene.add(this.mesh);
 	scene.add(this.light);
 	scene.add(this.spotlight)
-
 	Entities.Objects.push(this);
 }
 
-Entities.FancyLight.prototype.update = function(dt){
-	if(currentFloor > 1 && gameover == false){
+Entities.FancyLight.prototype.update = function(dt) {
+	if(currentFloor > 1 && gameover == false) {
 		this.light.intensity = Math.lerp(this.light.intensity, (player.health / 1000), dt * 8);
 		this.spotlight.intensity = Math.lerp(this.spotlight.intensity, (currentFloor / 2) * (player.health / 100), dt * 8);
 
@@ -624,7 +633,7 @@ Entities.FancyLight.prototype.update = function(dt){
 		this.position.y = Math.lerp(this.position.y, player.position.y + (2 * currentFloor) + 2, dt * 4);
 		this.position.z = Math.lerp(this.position.z, player.position.z, dt);
 
-		if(this.origColor != currentColor){
+		if(this.origColor != currentColor) {
 			this.origColor = currentColor;
 			this.color = createRGB(currentColor.r * 255 + 100, currentColor.g * 255 + 100, currentColor.b * 255 + 100);
 			this.light.color.copy(this.color);
@@ -633,7 +642,8 @@ Entities.FancyLight.prototype.update = function(dt){
 		}
 
 		this.mesh.position.y = this.position.y + Math.sin(TIME) / 50;
-	} else if(gameover == true){
+
+	} else if(gameover == true) {
 		this.light.intensity = Math.lerp(this.light.intensity, 25, dt * 8);
 		this.position.x = Math.lerp(this.position.x, 0, dt);
 		this.position.y = Math.lerp(this.position.y, 10, dt * 4);
@@ -641,14 +651,14 @@ Entities.FancyLight.prototype.update = function(dt){
 	}
 }
 
-Entities.FancyLight.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.FancyLight.prototype.destroy = function() {
 	scene.remove(this.mesh);
 	scene.remove(this.light);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Spike tiles are generated by the room gen and damage the player if he walks over them.
-Entities.Spike = function(position, rotation, scale, color){
+Entities.Spike = function(position, rotation, scale, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler(Math.rad(270), 0, Math.rad(90));
 	this.scale = scale || new THREE.Vector3(1, 1, 1);
@@ -679,13 +689,14 @@ Entities.Spike = function(position, rotation, scale, color){
 		wireframe: false
 	});
 
-	for(var u = 0; u < 8; u++){
-		for(var o = 0; o < 8; o++){
+	for(var u = 0; u < 8; u++) {
+		for(var o = 0; o < 8; o++) {
 			var spike = new THREE.Mesh(spikegeometry, spikematerial);
 			spike.position = new THREE.Vector3((u / 2) - (this.scale.x / 2) + 0.2, (o / 2) - (this.scale.z / 2) + 0.1, 0);
 			spike.rotation = new THREE.Euler(Math.PI_2, 0, 0);
 			spike.receiveShadow = true;
 			spike.castShadow = true;
+
 			THREE.GeometryUtils.merge(spikegeometryMERGE, spike);
 		}
 	}
@@ -696,25 +707,23 @@ Entities.Spike = function(position, rotation, scale, color){
 	});
 
 	this.spikemesh = new THREE.Mesh(spikegeometryMERGE, spikematerial);
-
-
 	this.mesh.add(this.spikemesh);
 
 	this.level = currentFloor;
 
 	scene.add(this.mesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.Spike.prototype.update = function(dt){
-	if(this.level != currentFloor){
+Entities.Spike.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
 		this.spikeHeight = -0.4;
 		this.spikemesh.position.z = this.spikeHeight;
 
-		if(this.mesh.position.y < floorHeight){
+		if(this.mesh.position.y < floorHeight) {
 			this.destroy();
-		} else{
+
+		} else {
 			this.scale = new THREE.Vector3(0, 0, 0);
 			this.vy = Math.lerp(this.vy, -9.81, dt / 16);
 			this.mesh.position.y += this.vy;
@@ -722,12 +731,13 @@ Entities.Spike.prototype.update = function(dt){
 			this.mesh.rotation.y += this.spin.y;
 			this.mesh.rotation.z += this.spin.z;
 		}
-	} else{
-		if(this.mesh.position.distanceTo(player.yawObject.position) < 2.5){
+
+	} else {
+		if(this.mesh.position.distanceTo(player.yawObject.position) < 2.5) {
 			TRAPSOUND.play();
 			player.health -= 500 * dt;
 
-			if(player.health > 0){
+			if(player.health > 0) {
 				fancylight.spotlight.intensity = 5;
 			}
 
@@ -736,13 +746,14 @@ Entities.Spike.prototype.update = function(dt){
 			player.velocity.y = (-player.velocity.y / 4) + 0.10 + Math.randomRangeFloat(-0.1, 0.1);
 			player.velocity.z += Math.randomRangeFloat(-0.15, 0.15);
 
-			for(var num = 0; num < Math.randomRange(5, 10); num++){
+			for(var num = 0; num < Math.randomRange(5, 10); num++) {
 				new Entities.Blood(player.yawObject.position, createRGB(255, 0, 0));
 			}
 
 			this.spikeHeight = 0.25;
 			this.spikemesh.position.z = this.spikeHeight;
-		} else{
+
+		} else {
 			this.spikeHeight = -0.4;
 		}
 
@@ -750,15 +761,14 @@ Entities.Spike.prototype.update = function(dt){
 	}
 }
 
-Entities.Spike.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
-
+Entities.Spike.prototype.destroy = function() {
 	this.mesh.remove(this.spikemesh);
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Jump pads are generated by the room gen and throw the player upwards when he steps on the center of them.
-Entities.JumpPad = function(position, rotation, scale, color){
+Entities.JumpPad = function(position, rotation, scale, color) {
 	this.position = position || new THREE.Vector3();
 	this.rotation = rotation || new THREE.Euler(Math.rad(270), 0, Math.rad(90));
 	this.scale = scale || new THREE.Vector3(1, 1, 1);
@@ -776,12 +786,11 @@ Entities.JumpPad = function(position, rotation, scale, color){
 		color: this.color,
 		wireframe: false
 	});
+
 	this.mesh = new THREE.Mesh(geometry, material);
 	this.mesh.position = this.position;
 	this.mesh.rotation = this.rotation;
 	this.mesh.receiveShadow = true;
-
-	scene.add(this.mesh);
 
 	var geometry = new THREE.CubeGeometry(this.scale.x / 2, 0.5, this.scale.z / 2);
 	var material = new THREE.MeshPhongMaterial({
@@ -796,19 +805,20 @@ Entities.JumpPad = function(position, rotation, scale, color){
 
 	this.level = currentFloor;
 
+	scene.add(this.mesh);
 	scene.add(this.padmesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.JumpPad.prototype.update = function(dt){
-	if(this.level != currentFloor){
+Entities.JumpPad.prototype.update = function(dt) {
+	if(this.level != currentFloor) {
 		this.padHeight = 1;
 		this.padmesh.position.y = this.padHeight;
 
-		if(this.mesh.position.y < floorHeight){
+		if(this.mesh.position.y < floorHeight) {
 			this.destroy();
-		} else{
+
+		} else {
 			this.scale = new THREE.Vector3(0, 0, 0);
 			this.vy = Math.lerp(this.vy, -9.81, dt / 16);
 			this.mesh.position.y += this.vy;
@@ -816,15 +826,17 @@ Entities.JumpPad.prototype.update = function(dt){
 			this.mesh.rotation.y += this.spin.y;
 			this.mesh.rotation.z += this.spin.z;
 		}
-	} else{
-		if(this.mesh.position.distanceTo(player.yawObject.position) < 2){
+
+	} else {
+		if(this.mesh.position.distanceTo(player.yawObject.position) < 2) {
 			BOOSTSOUND.play();
 			player.yawObject.position.y += 0.1;
 			player.velocity.x += Math.randomRangeFloat(-0.1, 0.1);
 			player.velocity.y = (-player.velocity.y / 4) + 0.5 + Math.randomRangeFloat(-0.1, 0.1);
 			player.velocity.z += Math.randomRangeFloat(-0.1, 0.1);
 			this.padHeight = this.position.y + 10;
-		} else{
+
+		} else {
 			this.padHeight = this.position.y;
 		}
 
@@ -832,15 +844,14 @@ Entities.JumpPad.prototype.update = function(dt){
 	}
 }
 
-Entities.JumpPad.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
-
+Entities.JumpPad.prototype.destroy = function() {
 	scene.remove(this.mesh);
 	scene.remove(this.padmesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Slime enemy found in the lower rooms. The only enemy in the game. Damages on close proximity to the player.
-Entities.Enemy = function(position, rotation, scale){
+Entities.Enemy = function(position, rotation, scale) {
 	this.collider = true;
 	this.health = 25;
 	this.position = position || new THREE.Vector3();
@@ -868,11 +879,10 @@ Entities.Enemy = function(position, rotation, scale){
 	this.level = currentFloor;
 
 	scene.add(this.mesh);
-
 	Entities.Objects.push(this);
 }
 
-Entities.Enemy.prototype.update = function(dt){
+Entities.Enemy.prototype.update = function(dt) {
 	this.force.x = Math.lerp(this.force.x, 0, dt * 8);
 	this.force.z = Math.lerp(this.force.z, 0, dt * 8);
 
@@ -889,12 +899,12 @@ Entities.Enemy.prototype.update = function(dt){
 	this.direction.x = (this.direction.x + this.force.x) * dt * 3;
 	this.direction.z = (this.direction.z + this.force.z) * dt * 3;
 
-	if(dist < 1.5){
+	if(dist < 1.5) {
 		HITARRAY[Math.randomRange(0, HITARRAY.length - 1)].play();
 
 		player.health -= 350 * dt;
 
-		if(player.health > 0){
+		if(player.health > 0) {
 			fancylight.spotlight.intensity = 5;
 		}
 
@@ -903,16 +913,16 @@ Entities.Enemy.prototype.update = function(dt){
 		player.velocity.y = (-player.velocity.y / 4) + 0.10 + Math.randomRangeFloat(-0.1, 0.1);
 		player.velocity.z += Math.randomRangeFloat(-0.15, 0.15);
 
-		for(var num = 0; num < Math.randomRange(5, 10); num++){
+		for(var num = 0; num < Math.randomRange(5, 10); num++) {
 			new Entities.Blood(player.yawObject.position, createRGB(255, 0, 0));
 		}
 	}
 
 	var collided = false;
-	for(var i = 0; i < Entities.Objects.length; i++){
-		if(Entities.Objects[i] != this && Entities.Objects[i] != player){
-			if(Entities.Objects[i].collider){
-				if(collision.boxHelper(this.mesh.position, this.mesh.scale, Entities.Objects[i].mesh.position, Entities.Objects[i].mesh.scale)){
+	for(var i = 0; i < Entities.Objects.length; i++) {
+		if(Entities.Objects[i] != this && Entities.Objects[i] != player) {
+			if(Entities.Objects[i].collider) {
+				if(collision.boxHelper(this.mesh.position, this.mesh.scale, Entities.Objects[i].mesh.position, Entities.Objects[i].mesh.scale)) {
 					collided = true;
 					break;
 				}
@@ -920,11 +930,11 @@ Entities.Enemy.prototype.update = function(dt){
 		}
 	}
 
-	if(collided === false){
+	if(collided === false) {
 		this.safeposition.copy(this.mesh.position);
 
 		this.d.lerp(this.direction, dt * 8);
-	} else{
+	} else {
 		this.direction.x = -this.direction.x;
 		this.direction.z = -this.direction.z;
 		this.mesh.position.copy(this.safeposition);
@@ -935,26 +945,27 @@ Entities.Enemy.prototype.update = function(dt){
 	this.mesh.translateX(this.d.x);
 	this.mesh.translateZ(this.d.z);
 
-	if(this.health <= 0 || currentFloor != this.level){
+	if(this.health <= 0 || currentFloor != this.level) {
 		fancylight.spotlight.intensity = 5;
 		DEATHSOUND.play();
 		this.destroy();
 	}
 }
 
-Entities.Enemy.prototype.destroy = function(){
+Entities.Enemy.prototype.destroy = function() {
 	totalEnemies++;
 	new Entities.Coin(this.mesh.position);
-	for(var num = 0; num < Math.randomRange(16, 32); num++){
+
+	for(var num = 0; num < Math.randomRange(16, 32); num++) {
 		new Entities.Blood(this.mesh.position, this.mesh.material.color);
 	}
 
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 // Blood entity spawning from player and enemy damage.
-Entities.Blood = function(position, color){
+Entities.Blood = function(position, color) {
 	this.position = new THREE.Vector3();
 	if(position) this.position.copy(position);
 
@@ -986,7 +997,7 @@ Entities.Blood = function(position, color){
 	Entities.Objects.push(this);
 }
 
-Entities.Blood.prototype.update = function(dt){
+Entities.Blood.prototype.update = function(dt) {
 	this.velocity.x = Math.lerp(this.velocity.x, 0, dt * 1.5);
 	this.velocity.z = Math.lerp(this.velocity.z, 0, dt * 1.5);
 
@@ -994,26 +1005,24 @@ Entities.Blood.prototype.update = function(dt){
 	this.mesh.position.y += this.velocity.y * dt;
 	this.mesh.position.z += this.velocity.z * dt;
 
-	if(this.mesh.position.y < floorHeight - (1.05 - this.scale.y)){
+	if(this.mesh.position.y < floorHeight - (1.05 - this.scale.y)) {
 		this.mesh.position.y = floorHeight - (1.05 - this.scale.y);
-	} else if(this.mesh.position.y < floorHeight - 1.05){
+
+	} else if(this.mesh.position.y < floorHeight - 1.05) {
 		this.destroy();
-	} else{
+
+	} else {
 		this.velocity.y = Math.lerp(this.velocity.y, -9.81 - (Math.abs(Math.sin(this.mesh.position.x * 10000))), dt);
 	}
 
 	if(this.level < currentFloor - 1) this.destroy();
 
 	this.scale.y -= dt / 50;
-
-	if(this.scale <= 0){
-
-	}
 }
 
-Entities.Blood.prototype.destroy = function(){
-	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
+Entities.Blood.prototype.destroy = function() {
 	scene.remove(this.mesh);
+	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
 /*
@@ -1025,11 +1034,11 @@ Entities.Blood.prototype.destroy = function(){
 	88           88  ,adPPPPP88   `8b   d8'   8PP"""""""  88
 	88           88  88,    ,88    `8b,d8'    "8b,   ,aa  88
 	88           88  `"8bbdP"Y8      Y88'      `"Ybbd8"'  88
-	                                 d8'
-	                                d8'
+									 d8'
+									d8'
 */
 
-Entities.Player = function(position, rotation, scale){
+Entities.Player = function(position, rotation, scale) {
 	this.walkTime = 0;
 	this.nextWalkLoop = 0.4;
 	this.canMove = false;
@@ -1077,16 +1086,18 @@ Entities.Player = function(position, rotation, scale){
 	Entities.Objects.push(this);
 }
 
-Entities.Player.prototype.update = function(dt){
-	if(gameover == false){
-		if(this.health > 0){
-			if(this.health < 100){
+Entities.Player.prototype.update = function(dt) {
+	if(gameover == false) {
+		if(this.health > 0) {
+			if(this.health < 100) {
 				this.health += 1 * dt;
-			} else{
+
+			} else {
 				this.health = 100;
 			}
-		} else{
-			if(gameover == false){
+
+		} else {
+			if(gameover == false) {
 				gameover = true;
 				notifyGameOver();
 			}
@@ -1097,15 +1108,15 @@ Entities.Player.prototype.update = function(dt){
 
 		this.pitchObject.rotation.x = Math.max(-Math.PI_2, Math.min(Math.PI_2, player.pitchObject.rotation.x));
 
-		if(this.yawObject.position.y > this.safeHeight){
+		if(this.yawObject.position.y > this.safeHeight) {
 			this.velocity.x = Math.lerp(this.velocity.x, 0, dt);
 			this.velocity.y = Math.lerp(this.velocity.y, -9.81, dt / 16);
 			this.velocity.z = Math.lerp(this.velocity.z, 0, dt);
 
 			this.canMove = false;
 
-		} else{
-			if(this.walkTime > this.nextWalkLoop){
+		} else {
+			if(this.walkTime > this.nextWalkLoop) {
 				this.walkTime = 0;
 				STEPARRAY[Math.randomRange(0, STEPARRAY.length - 1)].play();
 			}
@@ -1119,44 +1130,47 @@ Entities.Player.prototype.update = function(dt){
 			this.velocity.y = 0;
 			this.velocity.z = Math.lerp(this.velocity.z, 0, dt * 8);
 
-			if(input.keyboard.check("up")){
+			if(input.keyboard.check("up")) {
 				this.velocity.y += 0.25;
 				JUMPSOUND.play();
 			}
 
-			if(input.keyboard.check("forward")){
+			if(input.keyboard.check("forward")) {
 				this.walkTime += dt;
 				this.velocity.z -= dt;
-			} else if(input.keyboard.check("back")){
+
+			} else if(input.keyboard.check("back")) {
 				this.walkTime += dt;
 				this.velocity.z += dt * 0.75;
 			}
 
-			if(input.keyboard.check("left")){
+			if(input.keyboard.check("left")) {
 				this.walkTime += dt;
 				this.velocity.x -= dt;
-			} else if(input.keyboard.check("right")){
+
+			} else if(input.keyboard.check("right")) {
 				this.walkTime += dt;
 				this.velocity.x += dt;
 			}
 
-			if(this.walkTime > this.nextWalkLoop){
+			if(this.walkTime > this.nextWalkLoop) {
 				this.walkTime = 0;
 				STEPARRAY[Math.randomRange(0, STEPARRAY.length - 1)].play();
 			}
 		}
 
-		if(this.punchCooldown == 0){
-			if(input.mouse.check("punch")){
-				for(var i = 0; i < Entities.Objects.length; i++){
-					if(Entities.Objects[i] != this){
-						if(Entities.Objects[i].health){
-							if(Entities.Objects[i].mesh.position.distanceToSquared(this.yawObject.position) < 5){
+		if(this.punchCooldown == 0) {
+			if(input.mouse.check("punch")) {
+				for(var i = 0; i < Entities.Objects.length; i++) {
+					if(Entities.Objects[i] != this) {
+						if(Entities.Objects[i].health) {
+							if(Entities.Objects[i].mesh.position.distanceToSquared(this.yawObject.position) < 5) {
+
 								Entities.Objects[i].force.x = (Entities.Objects[i].mesh.position.x - this.yawObject.position.x) * 5;
 								Entities.Objects[i].force.z = (Entities.Objects[i].mesh.position.z - this.yawObject.position.z) * 5;
 								Entities.Objects[i].health -= 5;
 
-								for(var num = 0; num < Math.randomRange(2, 6); num++){
+								for(var num = 0; num < Math.randomRange(2, 6); num++) {
 									new Entities.Blood(Entities.Objects[i].mesh.position, Entities.Objects[i].mesh.material.color);
 								}
 
@@ -1171,19 +1185,21 @@ Entities.Player.prototype.update = function(dt){
 		}
 
 		var collided = false;
-		for(var i = 0; i < Entities.Objects.length; i++){
-			if(Entities.Objects[i] != this){
-				if(Entities.Objects[i].collider){
+
+		for(var i = 0; i < Entities.Objects.length; i++) {
+			if(Entities.Objects[i] != this) {
+				if(Entities.Objects[i].collider) {
 					var newScale = new THREE.Vector3();
 					newScale.copy(this.scale);
 					newScale.y = newScale.y * 6;
 
-					if(collision.boxHelper(this.yawObject.position, newScale, Entities.Objects[i].position, Entities.Objects[i].scale)){
-						if(Entities.Objects[i].position.y + Entities.Objects[i].scale.y / 2 < this.yawObject.position.y + this.scale.y / 2){
+					if(collision.boxHelper(this.yawObject.position, newScale, Entities.Objects[i].position, Entities.Objects[i].scale)) {
+						if(Entities.Objects[i].position.y + Entities.Objects[i].scale.y / 2 < this.yawObject.position.y + this.scale.y / 2) {
 							this.currentGround = Entities.Objects[i];
 							this.safeHeight = Entities.Objects[i].position.y + (Entities.Objects[i].scale.y / 2) + (this.scale.y / 2) + 0.5;
 							collided = false;
-						} else{
+
+						} else {
 							collided = true;
 						}
 
@@ -1193,18 +1209,20 @@ Entities.Player.prototype.update = function(dt){
 			}
 		}
 
-		if(collided === false){
+		if(collided === false) {
 			this.safeposition.copy(this.yawObject.position);
-			if(this.currentGround){
+
+			if(this.currentGround) {
 				var collisionPoint = new THREE.Vector3();
 				collisionPoint.copy(this.yawObject.position);
 				collisionPoint.y -= this.currentGround.scale.y / 2;
 
-				if(!collision.boxHelper(collisionPoint, this.scale, this.currentGround.position, this.currentGround.scale)){
+				if(!collision.boxHelper(collisionPoint, this.scale, this.currentGround.position, this.currentGround.scale)) {
 					this.safeHeight = floorHeight + 0.5;
 				}
 			}
-		} else{
+
+		} else {
 			this.velocity.x = -this.velocity.x / 2;
 			this.velocity.z = -this.velocity.z / 2;
 			this.yawObject.position.copy(this.safeposition);
@@ -1218,7 +1236,7 @@ Entities.Player.prototype.update = function(dt){
 	}
 }
 
-Entities.Player.prototype.destroy = function(){
+Entities.Player.prototype.destroy = function() {
 	Entities.Objects.splice(Entities.Objects.indexOf(this), 1);
 }
 
@@ -1234,18 +1252,16 @@ Entities.Player.prototype.destroy = function(){
 */
 
 // Main game function. Called when the game starts.
-function init(){
+function init() {
 	scene.add(camera);
 
 	ambiance = new Entities.AmbianceController();
-
 	player = new Entities.Player(new THREE.Vector3(0, 0, 0), new THREE.Euler(0, Math.rad(180), 0), new THREE.Vector3(0.5, 1.5, 0.5));
+	fancylight = new Entities.FancyLight(new THREE.Vector3(0, 350, 0));
 
 	generateRoom(1, -1, 100, createRGB(50, 200, 50), createRGB(75, 75, 75), createRGB(50, 200, 50), createRGB(235, 220, 205), 0.75);
 
-	fancylight = new Entities.FancyLight(new THREE.Vector3(0, 350, 0));
-
-	GAME.oncontextmenu = function(e){
+	GAME.oncontextmenu = function(e) {
 		e.preventDefault();
 	};
 
@@ -1255,18 +1271,18 @@ function init(){
 init(); // Execute the init function.
 
 // Main update loop used to handle ingame logic. 
-function update(){
+function update() {
 	DT = (Date.now() - LASTDT) / 1000; // Store the current time delta.
 	LASTDT = Date.now(); // Set the last time delta to this frames time.
 	TIME += DT; // Add the time to the elapsed amount of time.
 
 	// Update all entities
-	for(ent in Entities.Objects){
+	for(ent in Entities.Objects) {
 		Entities.Objects[ent].update(DT);
 	}
 
 	// Play the cave sound if the player has passed the first floor.
-	if(currentFloor > 1 && CAVEAMBIENCESOUND.loop === false){
+	if(currentFloor > 1 && CAVEAMBIENCESOUND.loop === false) {
 		CAVEAMBIENCESOUND.loop = true;
 		CAVEAMBIENCESOUND.play();
 	}
@@ -1279,18 +1295,18 @@ function update(){
 update(); // Initiate the update loop.
 
 // If the graphics context is lost we want to stop the update loop.
-renderer.context.canvas.addEventListener("webglcontextlost", function(event){
+renderer.context.canvas.addEventListener("webglcontextlost", function(event) {
 	event.preventDefault();
 	cancelAnimationFrame(update);
 }, false);
 
 // This function is called when the fullscreen library changes it's mode. State is true if fullscreen is active.
-function onFullscreenChange(state){
-	if(state === true){
+function onFullscreenChange(state) {
+	if(state === true) {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
-	} else{
+	} else {
 		renderer.setSize(WIDTH, HEIGHT);
 		camera.aspect = WIDTH / HEIGHT;
 		camera.updateProjectionMatrix();
@@ -1298,13 +1314,15 @@ function onFullscreenChange(state){
 }
 
 // Add some additional hardcoded key listeners outside of the normal key system.
-window.addEventListener("keydown", function(e){
-	if(e.keyCode === 70){
+window.addEventListener("keydown", function(e) {
+	if(e.keyCode === 70) {
 		fullscreen.toggle(GAME, true, onFullscreenChange);
-	} else if(e.keyCode === 107 || e.keyCode === 187){
+
+	} else if(e.keyCode === 107 || e.keyCode === 187) {
 		sensitivity = Math.min(sensitivity + 0.001, 0.1);
 		console.log("MOUSE sensitivity: " + sensitivity);
-	} else if(e.keyCode === 109 || e.keyCode === 189){
+		
+	} else if(e.keyCode === 109 || e.keyCode === 189) {
 		console.log(sensitivity);
 		sensitivity = Math.max(sensitivity - 0.001, 0.005);
 		console.log("MOUSE sensitivity: " + sensitivity);
